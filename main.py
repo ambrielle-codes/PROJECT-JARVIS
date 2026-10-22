@@ -54,7 +54,7 @@ def distance(): # Function to measure distance with ultrasonic sensor
 
 def loop():
     while True:
-        buttonPressed = bool(GPIO.input(GPIO.HIGH));
+        buttonPressed = bool(GPIO.input(btnPin));
         if (buttonPressed):
             isMotion = bool(GPIO.input(PIRPin));
             print(isMotion);
