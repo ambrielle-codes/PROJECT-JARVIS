@@ -18,12 +18,15 @@ MAX_DISTANCE = 152.4; # cm, approx 5 feet
 def setup():
     GPIO.setmode(GPIO.BOARD);
 
-    GPIO.setup(PIRPin, GPIO.IN) # pir setup
+    #pir setup
+    GPIO.setup(PIRPin, GPIO.IN);
+
+    #button setup
     GPIO.setup(btnPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)	# Set BUTTON'S mode is input, and pull up to high level(3.3V)
-	GPIO.add_event_detect(btnPin, GPIO.BOTH, callback=None, bouncetime=200)
+    GPIO.add_event_detect(btnPin, GPIO.BOTH, callback=None, bouncetime=200)
 
-
-	GPIO.setup(TRIG, GPIO.OUT) # Ultrasonic setup
+    #ultrasonic setup
+	GPIO.setup(TRIG, GPIO.OUT)
     GPIO.setup(ECHO, GPIO.IN)
 
 	GPIO.setup(VIBRATION_MOTOR, GPIO.OUT) 
@@ -50,18 +53,16 @@ def distance(): # Function to measure distance with ultrasonic sensor
 def loop():
     while true:
         buttonPressed = bool(GPIO.input(GPIO.HIGH));
-        if (buttonPressed){
+        if (buttonPressed):
             isMotion = bool(GPIO.input(PIR));
             print(isMotion);
-        }
 
         # if motion detected and distance is less than threshold value then vibrate for 2 secs
         dis = distance();
         print(dis);
-        if(isMotion && distance() < MAX_DISTANCE){
+        if(isMotion && distance() < MAX_DISTANCE):
             print(f"Object detected at: {dis} cm.");
             vibrate(2);
-        }
         
         
 
