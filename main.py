@@ -70,6 +70,8 @@ def vibrate(s):
     time.sleep(s)  # CHANGE TO SOMETHING ELSE
     GPIO.output(VIBRATION_MOTOR, GPIO.LOW)  # Turn off
 
+def destory():
+    GPIO.cleanup();
 
 if __name__ == '__main__': 	# Program start from here
     setup()
