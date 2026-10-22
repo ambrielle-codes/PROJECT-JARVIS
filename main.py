@@ -2,13 +2,14 @@
 import RPi.GPIO as GPIO
 import time
 
-isMotion = false;
+isMotion = False;
 btnPin = 40;
 PIRPin = 38;
 
 TRIG = 11;
 ECHO = 12;
 VIBRATION_MOTOR = 16;
+MAX_DISTANCE = 152.4; # cm, approx 5 feet
 
 # collect inputs
 
@@ -18,8 +19,8 @@ def setup():
     GPIO.setmode(GPIO.BOARD);
 
     GPIO.setup(PIRPin, GPIO.IN) # pir setup
-    GPIO.setup(BTNPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)	# Set BUTTON'S mode is input, and pull up to high level(3.3V)
-	GPIO.add_event_detect(BTNPin, GPIO.BOTH, callback=detect, bouncetime=200)
+    GPIO.setup(btnPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)	# Set BUTTON'S mode is input, and pull up to high level(3.3V)
+	GPIO.add_event_detect(btnPin, GPIO.BOTH, callback=detect, bouncetime=200)
 
 
 	GPIO.setup(TRIG, GPIO.OUT) # Ultrasonic setup
@@ -48,15 +49,26 @@ def distance(): # Function to measure distance with ultrasonic sensor
 
 def loop():
     while true:
-        buttonPressed = bool(GPIO.input(GPIO.HIGH))
-        if (buttonPressed) isMotion = bool(GPIO.input(PIR)) # this is an if statement in one line
+        buttonPressed = bool(GPIO.input(GPIO.HIGH));
+        if (buttonPressed){
+            isMotion = bool(GPIO.input(PIR));
+            print(isMotion);
+        }
 
-        # if isMotion && distance > some value then vibrate
+        # if motion detected and distance is less than threshold value then vibrate for 2 secs
+        dis = distance();
+        print(dis);
+        if(isMotion && distance() < MAX_DISTANCE){
+            print(f"Object detected at: {dis} cm.");
+            vibrate(2);
+        }
         
         
 
-def vibrate():
-    #FIXME-get the vibration to occur once button is pressed
+def vibrate(s):
+    GPIO.output(VIBRATION_MOTOR, GPIO.HIGH)  # Turn on
+    time.sleep(s)  # CHANGE TO SOMETHING ELSE
+    GPIO.output(VIBRATION_MOTOR, GPIO.LOW)  # Turn off
 
 
 if __name__ == '__main__': 	# Program start from here
