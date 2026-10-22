@@ -35,7 +35,7 @@ def setup():
     
 
 def distance(): # Function to measure distance with ultrasonic sensor
-	GPIO.output(TRIG, 0)
+    GPIO.output(TRIG, 0)
     time.sleep(0.000002)
     GPIO.output(TRIG, 1) # turns on TRIG then off very fast in order to send out a "ping"
     time.sleep(0.00001) 
@@ -53,16 +53,16 @@ def distance(): # Function to measure distance with ultrasonic sensor
     return (duration * 340 / 2) * 100  # Conversion to centimeters
 
 def loop():
-    while true:
+    while True:
         buttonPressed = bool(GPIO.input(GPIO.HIGH));
         if (buttonPressed):
-            isMotion = bool(GPIO.input(PIR));
+            isMotion = bool(GPIO.input(PIRPin));
             print(isMotion);
 
         # if motion detected and distance is less than threshold value then vibrate for 2 secs
         dis = distance();
         print(dis);
-        if(isMotion && distance() < MAX_DISTANCE):
+        if isMotion and dis < MAX_DISTANCE:
             print(f"Object detected at: {dis} cm.");
             vibrate(2);
         
@@ -73,14 +73,14 @@ def vibrate(s):
     time.sleep(s)  # CHANGE TO SOMETHING ELSE
     GPIO.output(VIBRATION_MOTOR, GPIO.LOW)  # Turn off
 
-def destory():
+def destroy():
     GPIO.cleanup();
 
 if __name__ == '__main__': 	# Program start from here
-    setup()
-	try:
-    	loop()
-	except KeyboardInterrupt:  # When 'Ctrl+C' is pressed, the child program destroy() will be  executed.
+    setup();
+    try:
+        loop()
+    except KeyboardInterrupt:  # When 'Ctrl+C' is pressed, the child program destroy() will be  executed.
         destroy()  
 
 
