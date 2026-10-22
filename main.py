@@ -55,16 +55,17 @@ def distance(): # Function to measure distance with ultrasonic sensor
 def loop():
     while True:
         buttonPressed = bool(GPIO.input(btnPin));
+    
         if (buttonPressed):
             isMotion = bool(GPIO.input(PIRPin));
             print(isMotion);
 
         # if motion detected and distance is less than threshold value then vibrate for 2 secs
-        dis = distance();
-        print(dis);
-        if isMotion and dis < MAX_DISTANCE:
-            print(f"Object detected at: {dis} cm.");
-            vibrate(2);
+            dis = distance();
+            print(dis);
+            if isMotion and dis < MAX_DISTANCE:
+                print(f"Object detected at: {dis} cm.");
+                vibrate(2);
         
         
 
