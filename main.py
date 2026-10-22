@@ -48,8 +48,10 @@ def distance(): # Function to measure distance with ultrasonic sensor
 
 def loop():
     while true:
-        buttonOn = bool(GPIO.input(GPIO.HIGH))
-        if (buttonOn) isMotion = bool(GPIO.input(PIR)) # this is an if statement in one line
+        buttonPressed = bool(GPIO.input(GPIO.HIGH))
+        if (buttonPressed) isMotion = bool(GPIO.input(PIR)) # this is an if statement in one line
+
+        # if isMotion && distance > some value then vibrate
         
         
 
