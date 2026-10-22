@@ -2,6 +2,7 @@
 import RPi.GPIO as GPIO
 import time
 
+buttonPressed = False;
 isMotion = False;
 btnPin = 40;
 PIRPin = 38;
@@ -53,7 +54,6 @@ def distance(): # Function to measure distance with ultrasonic sensor
     return (duration * 340 / 2) * 100  # Conversion to centimeters
 
 def loop():
-    global buttonPressed
     while True:
         buttonPressed = bool(GPIO.input(btnPin));
         print(buttonPressed);
@@ -68,7 +68,6 @@ def loop():
             if isMotion and dis < MAX_DISTANCE:
                 print(f"Object detected at: {dis} cm.");
                 vibrate(2)
-            buttonPressed=False
 
         
         
