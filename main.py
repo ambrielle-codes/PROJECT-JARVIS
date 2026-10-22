@@ -16,21 +16,23 @@ MAX_DISTANCE = 152.4; # cm, approx 5 feet
 # write logic
 
 def setup():
+    
     GPIO.setmode(GPIO.BOARD);
 
     #pir setup
     GPIO.setup(PIRPin, GPIO.IN);
 
     #button setup
-    GPIO.setup(btnPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)	# Set BUTTON'S mode is input, and pull up to high level(3.3V)
-    GPIO.add_event_detect(btnPin, GPIO.BOTH, callback=None, bouncetime=200)
-
+    GPIO.setup(btnPin, GPIO.IN, pull_up_down=GPIO.PUD_UP);	# Set BUTTON'S mode is input, and pull up to high level(3.3V)
+    GPIO.add_event_detect(btnPin, GPIO.BOTH, callback=None, bouncetime=200);
+    
     #ultrasonic setup
-	GPIO.setup(TRIG, GPIO.OUT)
-    GPIO.setup(ECHO, GPIO.IN)
-
-	GPIO.setup(VIBRATION_MOTOR, GPIO.OUT) 
+    GPIO.setup(TRIG, GPIO.OUT);
+    GPIO.setup(ECHO, GPIO.IN);
+    
+    GPIO.setup(VIBRATION_MOTOR, GPIO.OUT);
     GPIO.output(VIBRATION_MOTOR, GPIO.LOW)  # Turn off the vibration motor initially
+    
 
 def distance(): # Function to measure distance with ultrasonic sensor
 	GPIO.output(TRIG, 0)
