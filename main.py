@@ -20,7 +20,7 @@ def setup():
 
     GPIO.setup(PIRPin, GPIO.IN) # pir setup
     GPIO.setup(btnPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)	# Set BUTTON'S mode is input, and pull up to high level(3.3V)
-	GPIO.add_event_detect(btnPin, GPIO.BOTH, callback=detect, bouncetime=200)
+	GPIO.add_event_detect(btnPin, GPIO.BOTH, callback=None, bouncetime=200)
 
 
 	GPIO.setup(TRIG, GPIO.OUT) # Ultrasonic setup
