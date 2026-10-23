@@ -68,6 +68,7 @@ def loop():
             if isMotion and dis < MAX_DISTANCE:
                 print(f"Object detected at: {dis} cm.");
                 vibrate(2)
+            time.sleep(.003);
 
         
         
