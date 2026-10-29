@@ -1,0 +1,8 @@
+requests>=2.31
+python-dotenv
+# Drop-in replacement for RPi.GPIO, which fails on newer Raspberry Pi OS
+rpi-lgpio==0.6
+lgpio==0.2.2.0
+# lgpio is built from C code, so pip needs these system packages first:
+#   sudo apt install -y swig liblgpio-dev
+# setup.sh does all of this for you
