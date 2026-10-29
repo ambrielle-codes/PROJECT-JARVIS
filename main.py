@@ -4,6 +4,9 @@ import time
 import subprocess
 import base64
 import sys
+import os
+import requests
+from dotenv import load_dotenv
 from openai import OpenAI
 
 buttonPressed = False;
@@ -18,13 +21,17 @@ MAX_DISTANCE = 152.4; # cm, approx 5 feet
 dis = 0;
 
 # openAI
-API_KEY = ""
+API_KEY = os.environ["OPENAI_API_KEY"]
 MODEL = "gpt-5-nano-2025-08-07"      
 IMAGE_PATH = "captured_image.jpg"
 RESOLUTION = "640x480"
 
 client = OpenAI(api_key=API_KEY);
 prompt = "Describe the emotion of the person in front of you in one word: happy (if they are smiling), neutral, or sad (if they are frowning)"
+
+# deepgram
+load_dotenv()                        # reads the keys from .env
+DEEPGRAM_KEY = os.environ["DEEPGRAM_API_KEY"]
 
 def setup():
     
@@ -45,21 +52,22 @@ def setup():
     GPIO.output(VIBRATION_MOTOR, GPIO.LOW)  # Turn off the vibration motor initially
     
 def loop():
-	while True:
-		isMotion = bool(GPIO.input(PIRPin));
-		dis = distance();
-		print(dis);
-		print(isMotion)
-		if isMotion and dis < MAX_DISTANCE:
-			print(f"Object detected at: {dis} cm.");
-			vibrate(2);
-		buttonPressed = bool(GPIO.input(btnPin));
-		if buttonPressed:
-			capture_image(IMAGE_PATH)
-			data_url = to_data_url(IMAGE_PATH)
-			emotion = getEmotionFromImage(data_url)
-			print("The person is " + emotion)
-		time.sleep(0.3)
+    while True:
+        isMotion = bool(GPIO.input(PIRPin));
+        dis = distance();
+        print(dis);
+        print(isMotion)
+        if isMotion and dis < MAX_DISTANCE:
+            print(f"Object detected at: {dis} cm.");
+            vibrate(2);
+        buttonPressed = bool(GPIO.input(btnPin));
+        if buttonPressed:
+            capture_image(IMAGE_PATH)
+            data_url = to_data_url(IMAGE_PATH)
+            emotion = getEmotionFromImage(data_url)
+            output_text = "The person in front of you is " + emotion
+            text_to_speech(output_text)
+        time.sleep(0.3)
 
 def getEmotionFromImage(data_url):
 	resp = client.responses.create(
@@ -126,6 +134,14 @@ def extract_text(resp):
         return resp.model_dump_json(indent=2)
     except Exception:
         return str(resp)
+
+def text_to_speech(text):
+    r = requests.post(
+        "https://api.deepgram.com/v1/speak?model=aura-2-thalia-en&encoding=linear16&container=wav",
+        headers={"Authorization": "Token " + DEEPGRAM_KEY},
+        json={"text": text})
+    r.raise_for_status()
+    open("answer.wav", "wb").write(r.content)
 
 def destroy():
     GPIO.cleanup();
